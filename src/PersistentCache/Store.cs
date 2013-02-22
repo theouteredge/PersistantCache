@@ -11,7 +11,7 @@ using ServiceStack.Text;
 
 namespace PersistentCache
 {
-    public class PersistentCache
+    public class Store
     {
         private readonly HashAlgorithm _hash;
         private readonly MemoryCache _cache;
@@ -24,7 +24,7 @@ namespace PersistentCache
 
 
 
-        public PersistentCache(HashAlgorithm hash = null)
+        public Store(HashAlgorithm hash = null)
         {
             _hash = hash ?? new SHA1Managed();
 
@@ -38,31 +38,48 @@ namespace PersistentCache
             _cache = new MemoryCache("MainCache", config);
         }
 
-
+        private readonly object _lock = new object();
         public void Put(string key, object value, int itemExpiration = 10)
         {
-            _cache.Add(Hash(key), value, new CacheItemPolicy() { RemovedCallback = RemovedCallback });
+            lock (_lock)
+            {
+                _cache.Set(Hash(key, _hash), value, new CacheItemPolicy() { RemovedCallback = RemovedCallback });
+            }
         }
+
+
 
         public bool TryGet<T>(string key, out T value)
         {
-            var hashKey = Hash(key);
-            if (_cache.Contains(hashKey))
+            lock (_lock)
             {
-                value = (T)_cache[hashKey];
-                return true;
-            }
+                // if this lives outside lock we get errors...
+                var hashKey = Hash(key, _hash);
 
-            // it wasn't in the memory cache, so look for a file with the keys name
-            var filename = GetSafeFileName(hashKey);
-            if (File.Exists(filename))
-            {
-                value = File.ReadAllText(BaseDirectory + filename).FromJson<T>();
-                return true;
-            }
+                var valueTmp = _cache.Get(hashKey);
+                if (valueTmp != null)
+                {
+                    value = (T)valueTmp;
+                    return true;
+                }
 
-            value = default(T);
-            return false;
+                if (_cache.Contains(hashKey))
+                {
+                    value = (T)_cache[hashKey];
+                    return true;
+                }
+
+                // it wasn't in the memory cache, so look for a file with the keys name
+                var filename = GetSafeFileName(hashKey);
+                if (File.Exists(filename))
+                {
+                    value = File.ReadAllText(BaseDirectory + filename).FromJson<T>();
+                    return true;
+                }
+
+                value = default(T);
+                return false;
+            }
         }
 
 
@@ -75,7 +92,7 @@ namespace PersistentCache
             }
         }
 
-        private string GetSafeFileName(string filename)
+        private static string GetSafeFileName(string filename)
         {
             Array.ForEach(Path.GetInvalidFileNameChars(), c => filename = filename.Replace(c.ToString(), "_"));
 
@@ -83,10 +100,10 @@ namespace PersistentCache
         }
 
 
-        private string Hash(string s)
+        private static string Hash(string s, HashAlgorithm hash)
         {
             var buffer = Encoding.UTF8.GetBytes(s);
-            var hashedBuffer = _hash.ComputeHash(buffer);
+            var hashedBuffer = hash.ComputeHash(buffer);
 
             return Convert.ToBase64String(hashedBuffer);
         }
