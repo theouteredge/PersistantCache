@@ -39,21 +39,22 @@ namespace PersistentCache
         }
 
 
-        public void Put(string key, object value)
+        public void Put(string key, object value, int itemExpiration = 10)
         {
-            _cache.Add(key, value, new CacheItemPolicy() {RemovedCallback = RemovedCallback});
+            _cache.Add(Hash(key), value, new CacheItemPolicy() { RemovedCallback = RemovedCallback });
         }
 
         public bool TryGet<T>(string key, out T value)
         {
-            if (_cache.Contains(key))
+            var hashKey = Hash(key);
+            if (_cache.Contains(hashKey))
             {
-                value = (T)_cache[key];
+                value = (T)_cache[hashKey];
                 return true;
             }
 
             // it wasn't in the memory cache, so look for a file with the keys name
-            var filename = GetSafeFileName(key);
+            var filename = GetSafeFileName(hashKey);
             if (File.Exists(filename))
             {
                 value = File.ReadAllText(BaseDirectory + filename).FromJson<T>();
@@ -76,8 +77,6 @@ namespace PersistentCache
 
         private string GetSafeFileName(string filename)
         {
-            filename = Hash(filename);
-
             Array.ForEach(Path.GetInvalidFileNameChars(), c => filename = filename.Replace(c.ToString(), "_"));
 
             return filename + ".cache";
