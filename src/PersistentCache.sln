@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersistentCache", "PersistentCache\PersistentCache.csproj", "{6F468CFA-484E-410B-8BCB-95358B7657EA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersistentCache.PerformanceTests", "PersistentCache.PerformanceTests\PersistentCache.PerformanceTests.csproj", "{AF784DE4-99C8-4568-AF9A-76ACE4BBC266}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{6F468CFA-484E-410B-8BCB-95358B7657EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6F468CFA-484E-410B-8BCB-95358B7657EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6F468CFA-484E-410B-8BCB-95358B7657EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF784DE4-99C8-4568-AF9A-76ACE4BBC266}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF784DE4-99C8-4568-AF9A-76ACE4BBC266}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF784DE4-99C8-4568-AF9A-76ACE4BBC266}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF784DE4-99C8-4568-AF9A-76ACE4BBC266}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
