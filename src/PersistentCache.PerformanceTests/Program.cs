@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,14 +14,14 @@ namespace PersistentCache.PerformanceTests
         private static readonly Store _cache = new Store()
             {
                 BaseDirectory = "C:\\tmp\\PersistentCache",
-                CacheMemoryLimitMegabytes = "1",
+                CacheMemoryLimitMegabytes = "500",
                 PollingInterval = "00:00:10"
             };
 
         static void Main(string[] args)
         {
             Console.WriteLine("Creating Data");
-            var itemsToUse = 1000000;
+            var itemsToUse = 10000;
 
             var items = new List<CacheItem>(itemsToUse);
             var temp = new CacheItem[itemsToUse];
@@ -55,11 +56,12 @@ namespace PersistentCache.PerformanceTests
             var exceptions = 0;
             var storageExceptions = 0;
             var saveExceptions = 0;
+            var hasher = new SHA1Managed();
 
             stopwatch.Start();
             foreach (var item in items)
             {
-                int value = 0;
+                var value = 0;
                 if (_cache.TryGet(item.Key, out value))
                 {
                     cacheHits++;
@@ -68,12 +70,6 @@ namespace PersistentCache.PerformanceTests
                 {
                     cacheMiss++;
                     _cache.Put(item.Key, item.Value);
-                    //if (!_cache.Put(item.Key, item.Value))
-                    //{
-                    //    // try again
-                    //    if (!_cache.Put(item.Key, item.Value))
-                    //        saveExceptions++;
-                    //}
 
                     if (!_cache.TryGet(item.Key, out value))
                         exceptions++;
