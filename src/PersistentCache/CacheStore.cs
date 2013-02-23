@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
-using System.Linq;
 using System.Runtime.Caching;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 using ServiceStack.Text;
 
 namespace PersistentCache
@@ -90,7 +87,7 @@ namespace PersistentCache
             var hashedBuffer = hash.ComputeHash(buffer);
 
             result = Convert.ToBase64String(hashedBuffer);
-            
+
             return result;
         }
     }

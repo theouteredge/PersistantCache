@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersistentCache", "Persiste
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersistentCache.PerformanceTests", "PersistentCache.PerformanceTests\PersistentCache.PerformanceTests.csproj", "{AF784DE4-99C8-4568-AF9A-76ACE4BBC266}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersistantCache.FileHandlingTests", "PersistantCache.FileHandlingTests\PersistantCache.FileHandlingTests.csproj", "{07B22E3C-7A54-4D00-9759-D2ED378CC113}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{AF784DE4-99C8-4568-AF9A-76ACE4BBC266}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF784DE4-99C8-4568-AF9A-76ACE4BBC266}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF784DE4-99C8-4568-AF9A-76ACE4BBC266}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07B22E3C-7A54-4D00-9759-D2ED378CC113}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07B22E3C-7A54-4D00-9759-D2ED378CC113}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07B22E3C-7A54-4D00-9759-D2ED378CC113}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07B22E3C-7A54-4D00-9759-D2ED378CC113}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
