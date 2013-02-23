@@ -46,7 +46,7 @@
     <Compile Include="BlockingCache.cs" />
     <Compile Include="CacheStore.cs" />
     <Compile Include="FileBase.cs" />
-    <Compile Include="FileIndex.cs" />
+    <Compile Include="KeyFileIndex.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
