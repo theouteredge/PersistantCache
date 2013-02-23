@@ -11,7 +11,7 @@ namespace PersistentCache.PerformanceTests
 {
     class Program
     {
-        private static readonly Store _cache = new Store()
+        private static readonly CacheStore _cache = new CacheStore()
             {
                 BaseDirectory = "C:\\tmp\\PersistentCache",
                 CacheMemoryLimitMegabytes = "500",
