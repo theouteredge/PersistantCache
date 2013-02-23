@@ -4,14 +4,14 @@ using ServiceStack.Text;
 
 namespace PersistentCache
 {
-    public class FileIndex : FileBase
+    public class KeyFileIndex : FileBase
     {
         private readonly int _keyLength;
         private readonly int _dataLength;
         private readonly int _intLength;
 
 
-        public FileIndex(string baseDirectory, int keyLength) : base(baseDirectory)
+        public KeyFileIndex(string baseDirectory, int keyLength) : base(baseDirectory)
         {
             _keyLength = keyLength;
 
@@ -20,7 +20,7 @@ namespace PersistentCache
         }
 
 
-        public void Add(string key, int start, int end)
+        public void Add(string key, int start, int length)
         {
             var keyBytes = key.ToUtf8Bytes();
             
@@ -29,7 +29,7 @@ namespace PersistentCache
             var temp = start.ToUtf8Bytes();
             temp.CopyTo(dataBytes, 0);
 
-            temp = end.ToUtf8Bytes();
+            temp = length.ToUtf8Bytes();
             temp.CopyTo(dataBytes, _intLength);
 
             base.Write(new List<byte[]>() { keyBytes, dataBytes });
@@ -37,7 +37,7 @@ namespace PersistentCache
 
         public bool Contains(string key)
         {
-            var position = 0;    
+            var position = 0;
             while (position < base.NextWritePosition)
             {
                 var k = base.Read(position, _keyLength);
@@ -50,10 +50,10 @@ namespace PersistentCache
             return false;
         }
 
-        public bool GetDataPosition(string key, out int start, out int end)
+        public bool GetDataPosition(string key, out int start, out int length)
         {
             start = 0;
-            end = 0;
+            length = 0;
 
             var position = GetKeyPosition(key);
             if (position == -1)
@@ -63,7 +63,7 @@ namespace PersistentCache
             start = Convert.ToInt32(Read(position, _intLength));
 
             position = position + _intLength;
-            end = Convert.ToInt32(Read(position, _intLength));
+            length = Convert.ToInt32(Read(position, _intLength));
 
             return true;
         }
