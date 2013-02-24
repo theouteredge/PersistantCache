@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>PersistentCache</id>
+        <version>0.1.0</version>
+        <title />
+        <authors>theouteredge</authors>
+        <owners>theouteredge</owners>
+        <projectUrl>https://github.com/theouteredge/PersistantCache</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>A C# library which gives you a Persistent Cache, if we run out of memory we will store the expired and evicted cache items to disk. Think Membase but as a simple C# project, which you can include in your project.</description>
+        <summary>Persistent Cache Library</summary>
+        <copyright>theouteredge</copyright>
+        <tags>Persistent Cache</tags>
+    </metadata>
+    
+    <files>
+        <file src="..\PersistentCache\bin\Release\PersistentCache.dll" target="lib\PersistentCache.dll" />
+    </files>
+</package>

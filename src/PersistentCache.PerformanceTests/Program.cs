@@ -12,7 +12,7 @@ namespace PersistentCache.PerformanceTests
 {
     class Program
     {
-        private static readonly CacheStore PersistentCache = new CacheStore("c:\\tmp\\PersistentCache", "1", null, "00:00:10");
+        private static readonly CacheStore PersistentCache = new CacheStore("c:\\tmp\\PersistantCache", "1", null, "00:01:00");
 
 
         static void Main(string[] args)
@@ -23,13 +23,11 @@ namespace PersistentCache.PerformanceTests
             var items = GenerateList(itemsToUse, 20);
             items.Shuffle();
 
-            //var temp = new CacheItem[itemsToUse];
-            //items.CopyTo(temp);
-            //var reversedItems = temp.Reverse().ToList();
+            var temp = new CacheItem[itemsToUse];
+            items.CopyTo(temp);
+            var reversedItems = temp.Reverse().ToList();
 
-            RunPersistanceCacheTest(new List<List<CacheItem>>(2) { items });
-            //RunDiskCacheTest(new List<List<CacheItem>>(2) { items });
-
+            RunPersistanceCacheTest(new List<List<CacheItem>>(2) { items, reversedItems });
 
             Console.ReadKey();
         }

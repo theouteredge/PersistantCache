@@ -100,6 +100,7 @@ namespace PersistentCache.DiskCache
                 else
                     result[i] = key[i];
             }
+            // lots of replaces are very slow when called 1000s of times per second
             //Array.ForEach(Path.GetInvalidFileNameChars(), c => key = key.Replace(c.ToString(), "_"));
             
             return Path.Combine(_baseDirectory, new string(result));
@@ -107,7 +108,7 @@ namespace PersistentCache.DiskCache
 
         public void Dispose()
         {
-            Directory.Delete(_baseDirectory, true);
+            Directory.Delete(_baseDirectory);
         }
     }
 }
