@@ -53,13 +53,11 @@ namespace PersistentCache
                     {"cacheMemoryLimitMegabytes", cacheMemoryLimitMegabytes ?? "100" }
                 };
 
-            _cache = new MemoryCache("MainCache", config);
-            
-            //_diskCache = new FileCache(BaseDirectory);
-            _diskCache = new DirectoryCache(BaseDirectory);
+            if (!Directory.Exists(baseDirectory))
+                Directory.CreateDirectory(BaseDirectory);
 
-            //var keyLength = Hash(Guid.NewGuid().ToString()).ToUtf8Bytes().Length;
-            //_diskCache = new DiskCache(BaseDirectory, keyLength);
+            _cache = new MemoryCache("MainCache", config);
+            _diskCache = new DirectoryCache(BaseDirectory);
         }
 
 
