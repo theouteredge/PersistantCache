@@ -6,72 +6,117 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using ServiceStack.Text;
 
 namespace PersistentCache.PerformanceTests
 {
     class Program
     {
-        private static readonly CacheStore _cache = new CacheStore()
-            {
-                BaseDirectory = "C:\\tmp\\PersistentCache",
-                CacheMemoryLimitMegabytes = "500",
-                PollingInterval = "00:00:10"
-            };
+        private static readonly CacheStore PersistentCache = new CacheStore("c:\\tmp\\PersistentCache", "1", null, "00:00:10");
+
 
         static void Main(string[] args)
         {
             Console.WriteLine("Creating Data");
-            var itemsToUse = 10000;
+            const int itemsToUse = 1000000;
 
-            var items = new List<CacheItem>(itemsToUse);
-            var temp = new CacheItem[itemsToUse];
+            var items = GenerateList(itemsToUse, 20);
+            items.Shuffle();
 
-            for (var i = 0; i < itemsToUse; i++)
-            {
-                items.Add(new CacheItem() { Key = Guid.NewGuid().ToString(), Value = i });
-            }
+            //var temp = new CacheItem[itemsToUse];
+            //items.CopyTo(temp);
+            //var reversedItems = temp.Reverse().ToList();
 
-            items.CopyTo(temp);
-            var reversedItems = temp.Reverse();
+            RunPersistanceCacheTest(new List<List<CacheItem>>(2) { items });
+            //RunDiskCacheTest(new List<List<CacheItem>>(2) { items });
 
-
-
-            Console.WriteLine("Starting threads");
-
-            Task.Factory.StartNew(() => RunTest(items));
-            //Thread.Sleep(5000);
-            Task.Factory.StartNew(() => RunTest(reversedItems));
-
-            Console.WriteLine("Executing");
-            Console.WriteLine("");
 
             Console.ReadKey();
         }
 
-        private static void RunTest(IEnumerable<CacheItem> items)
+        private static List<CacheItem> GenerateList(int itemsToUse, double percentageOfDuplicates)
+        {
+            var percentageOfUniques = (100.0 - percentageOfDuplicates) / 100.0;
+            percentageOfDuplicates = 1 - (percentageOfUniques);
+
+            var uniqueCount = (int) Math.Ceiling(itemsToUse*percentageOfUniques);
+            var duplicateCount = (int) Math.Ceiling(itemsToUse*percentageOfDuplicates);
+
+            var results = new List<CacheItem>(uniqueCount);
+            var duplicates = new List<CacheItem>(duplicateCount);
+
+            for (var i = 0; i < uniqueCount; i++)
+            {
+                results.Add(new CacheItem() { Key = Guid.NewGuid().ToString(), Value = i });
+            }
+
+            var random = new Random(DateTime.Now.Millisecond);
+            for (var i = 0; i < duplicateCount; i++)
+            {
+                var index = random.Next(uniqueCount);
+                duplicates.Add(results[index]);
+            }
+            
+            results.AddRange(duplicates);
+            return results;
+        }
+
+
+
+        private static void RunPersistanceCacheTest(List<List<CacheItem>> data)
+        {
+            Console.WriteLine("Starting {0} threads", data.Count);
+            var thread = 0;
+            var threads = new List<Task>(data.Count);
+
+            foreach (var set in data)
+            {
+                threads.Add(Task.Factory.StartNew(() => RunThreadPersistancCacheTest(set, thread++)));
+            }
+
+            Console.WriteLine("Executing");
+            Console.WriteLine("");
+
+            Task.WaitAll(threads.ToArray());
+            
+            Console.WriteLine("cleaning up...");
+            
+            var sw = new Stopwatch();
+            
+            sw.Start();
+            PersistentCache.Dispose();
+            sw.Stop();
+
+            Console.WriteLine("clean in {0}ms :D", sw.ElapsedMilliseconds);
+        }
+
+
+        private static void RunThreadPersistancCacheTest(IEnumerable<CacheItem> items, int threadNo)
         {
             var stopwatch = new Stopwatch();
             var cacheHits = 0;
             var cacheMiss = 0;
             var exceptions = 0;
             var storageExceptions = 0;
-            var saveExceptions = 0;
-            var hasher = new SHA1Managed();
+            var count = 0;
+            long lastInterval = 0;
 
             stopwatch.Start();
             foreach (var item in items)
             {
+                count++;
+
                 var value = 0;
-                if (_cache.TryGet(item.Key, out value))
+                if (PersistentCache.TryGet(item.Key, out value))
                 {
                     cacheHits++;
                 }
                 else
                 {
                     cacheMiss++;
-                    _cache.Put(item.Key, item.Value);
+                    PersistentCache.Put(item.Key, item.Value);
 
-                    if (!_cache.TryGet(item.Key, out value))
+                    if (!PersistentCache.TryGet(item.Key, out value))
                         exceptions++;
                 }
 
@@ -79,10 +124,16 @@ namespace PersistentCache.PerformanceTests
                 {
                     storageExceptions++;
                 }
+
+                if (count % 1000 == 0)
+                {
+                    Console.WriteLine("Thread: {0} :: {1} processed ... {2}ms", threadNo, count, lastInterval == 0 ? stopwatch.ElapsedMilliseconds : stopwatch.ElapsedMilliseconds - lastInterval);
+                    lastInterval = stopwatch.ElapsedMilliseconds;
+                }
             }
             stopwatch.Stop();
 
-            Console.WriteLine("\tTest run in {0}ms, with {1} hits and {2} misses, exceptions {3} and storage exceptions {4} and save excpetions {5}", stopwatch.ElapsedMilliseconds, cacheHits, cacheMiss, exceptions, storageExceptions, saveExceptions);
+            Console.WriteLine("Threa: {5} :: Test run in {0}ms, with {1} hits and {2} misses, exceptions {3} and storage exceptions {4}", stopwatch.ElapsedMilliseconds, cacheHits, cacheMiss, exceptions, storageExceptions, threadNo);
         }
     }
 }
