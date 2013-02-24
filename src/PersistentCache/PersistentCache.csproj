@@ -43,10 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BlockingCache.cs" />
     <Compile Include="CacheStore.cs" />
-    <Compile Include="FileBase.cs" />
-    <Compile Include="KeyFileIndex.cs" />
+    <Compile Include="DiskCache\DirectoryCache.cs" />
+    <Compile Include="DiskCache\FileCache.cs" />
+    <Compile Include="ICacheToDisk.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
