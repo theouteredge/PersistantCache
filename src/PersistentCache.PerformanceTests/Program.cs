@@ -23,11 +23,14 @@ namespace PersistentCache.PerformanceTests
             var items = GenerateList(itemsToUse, 20);
             items.Shuffle();
 
-            var temp = new CacheItem[itemsToUse];
-            items.CopyTo(temp);
-            var reversedItems = temp.Reverse().ToList();
+            //var temp = new CacheItem[itemsToUse];
+            //items.CopyTo(temp);
+            //var reversedItems = temp.Reverse().ToList();
 
-            RunPersistanceCacheTest(new List<List<CacheItem>>(2) { items, reversedItems });
+            var items2 = GenerateList(itemsToUse, 20);
+            items2.Shuffle();
+
+            RunPersistanceCacheTest(new List<List<CacheItem>>(2) { items, items2 });
 
             Console.ReadKey();
         }

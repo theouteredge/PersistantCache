@@ -4,11 +4,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
-namespace PersistentCache.Cache
+namespace PersistentCache.InmemoryCache
 {
     public class BlockingCache : ICache
     {
-        private readonly ConcurrentDictionary<string, CachedValue> _cache = new ConcurrentDictionary<string, CachedValue>();
+        // slow 55secs for 2million items
+        //private ConcurrentDictionary<string, CachedValue> _cache = new ConcurrentDictionary<string, CachedValue>();
+
+        // 16secs for 2million items
+        private Dictionary<string, CachedValue> _cache = new Dictionary<string, CachedValue>();
+
+        // slow 70secs
+        //private SortedDictionary<string, CachedValue> _cache = new SortedDictionary<string, CachedValue>();
+
         
         private readonly int _maxCacheSize;
         private readonly int _trimThreshold;
@@ -44,24 +52,42 @@ namespace PersistentCache.Cache
             return false;
         }
 
+        readonly object _writelock = new object();
         public bool TryAdd(string key, object value)
         {
-            var result = _cache.TryAdd(key, new CachedValue(value));
+            var result = false;
+            lock (_writelock)
+            {
+                if (!_cache.ContainsKey(key))
+                {
+                    _cache.Add(key, new CachedValue(value));
+                    result = true;
+                }
+            }
+
             return result;
         }
 
+        private readonly object _removelock = new object();
         public bool TryRemove(string key, out object value)
         {
             CachedValue item;
-            var result = _cache.TryRemove(key, out item);
+            lock (_removelock)
+            {
+                item = _cache[key];
+                _cache.Remove(key);
+            }
 
             value = item.Value;
-            return result;
+            return true;
         }
 
 
         private void ManageCacheSize(object state)
         {
+            if (_cache == null)
+                return;
+
             var limit = TimeSpan.FromSeconds(30);
 
             // trim all the cache items which have never been hit, and have been hanging around for 30seconds
@@ -108,8 +134,14 @@ namespace PersistentCache.Cache
         {
             CacheItemRemovedCallback.Invoke(item.Key, item.Value);
 
-            CachedValue value;
-            _cache.TryRemove(item.Key, out value);
+            object value;
+            TryRemove(item.Key, out value);
+        }
+
+        public void Dispose()
+        {
+            _cache = null;
+            _timer.Dispose();
         }
     }
 }

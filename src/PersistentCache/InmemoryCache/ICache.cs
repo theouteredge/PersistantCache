@@ -1,8 +1,8 @@
 using System;
 
-namespace PersistentCache.Cache
+namespace PersistentCache.InmemoryCache
 {
-    public interface ICache
+    public interface ICache : IDisposable
     {
         Action<string, object> CacheItemRemovedCallback { get; }
 

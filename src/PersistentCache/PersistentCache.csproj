@@ -43,10 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Cache\BlockingCache.cs" />
+    <Compile Include="InmemoryCache\BlockingCache.cs" />
     <Compile Include="CacheStore.cs" />
-    <Compile Include="Cache\CachedValue.cs" />
-    <Compile Include="Cache\ICache.cs" />
+    <Compile Include="InmemoryCache\CachedValue.cs" />
+    <Compile Include="InmemoryCache\ICache.cs" />
     <Compile Include="DiskCache\DirectoryCache.cs" />
     <Compile Include="DiskCache\FileCache.cs" />
     <Compile Include="ICacheToDisk.cs" />

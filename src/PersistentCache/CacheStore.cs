@@ -5,6 +5,7 @@ using System.Runtime.Caching;
 using System.Security.Cryptography;
 using System.Text;
 using PersistentCache.DiskCache;
+using PersistentCache.InmemoryCache;
 using ServiceStack.Text;
 
 namespace PersistentCache
@@ -29,7 +30,8 @@ namespace PersistentCache
     /// </summary>
     public class CacheStore : IDisposable
     {
-        private readonly MemoryCache _cache;
+        //private readonly MemoryCache _cache;
+        private BlockingCache _cache;
         private readonly ICacheToDisk _diskCache;
         private bool _itemsCachedToDisk = false;
 
@@ -56,14 +58,16 @@ namespace PersistentCache
             if (!Directory.Exists(baseDirectory))
                 Directory.CreateDirectory(BaseDirectory);
 
-            _cache = new MemoryCache("MainCache", config);
+            //_cache = new MemoryCache("MainCache", config);
+            _cache = new BlockingCache(1000000, TimeSpan.FromSeconds(30), RemovedCallback);
             _diskCache = new DirectoryCache(BaseDirectory);
         }
 
 
         public void Put(string key, object value, int itemExpiration = 10)
         {
-            _cache.Set(Hash(key), value, new CacheItemPolicy() { RemovedCallback = RemovedCallback });
+            //_cache.Set(Hash(key), value, new CacheItemPolicy() { RemovedCallback = RemovedCallback });
+            _cache.TryAdd(Hash(key), value);
         }
 
 
@@ -71,10 +75,13 @@ namespace PersistentCache
         {
             key = Hash(key);
 
-            var valueTmp = _cache.Get(key);
-            if (valueTmp != null)
+            //var valueTmp = _cache.Get(key);
+            //if (valueTmp != null)
+
+            object valueTmp;
+            if (_cache.TryGet(key, out valueTmp))
             {
-                value = (T)valueTmp;
+                value = (T) valueTmp;
                 return true;
             }
 
@@ -98,6 +105,12 @@ namespace PersistentCache
                 _itemsCachedToDisk = true;
                 _diskCache.Put(arguments.CacheItem.Key, arguments.CacheItem.Value);
             }
+        }
+
+        private void RemovedCallback(string key, object value)
+        {
+            _diskCache.Put(key, value);
+            _itemsCachedToDisk = true;
         }
 
         
