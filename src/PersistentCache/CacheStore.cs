@@ -58,12 +58,12 @@ namespace PersistentCache
             if (!Directory.Exists(baseDirectory))
                 Directory.CreateDirectory(BaseDirectory);
 
+
+            // 28secs for 2,000,000. ok... 
+            _cache = new StdMemoryCache(config, RemovedCallback);
             
-            // fast 28secs for 2,000,000
-            //_cache = new StdMemoryCache(config, RemovedCallback);
-            
-            // fast 12secs for 2,000,000
-            _cache = new BlockingCache(1000000, TimeSpan.FromSeconds(30), RemovedCallback);
+            // 12secs for 2,000,000. But needs more work to implement the Cache Management correctly
+            //_cache = new BlockingCache(1000000, TimeSpan.FromSeconds(30), RemovedCallback);
             
             // 88seconds for 2million, sloooooowwww
             //_cache = new RedBlackTreeCache(RemovedCallback);
