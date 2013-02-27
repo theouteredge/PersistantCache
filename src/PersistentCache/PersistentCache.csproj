@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="C5">
+      <HintPath>..\packages\C5.2.1.4492.18142\lib\net40\C5.dll</HintPath>
+    </Reference>
     <Reference Include="ServiceStack.Text">
       <HintPath>..\packages\ServiceStack.Text.3.9.37\lib\net35\ServiceStack.Text.dll</HintPath>
     </Reference>
@@ -50,6 +53,8 @@
     <Compile Include="DiskCache\DirectoryCache.cs" />
     <Compile Include="DiskCache\FileCache.cs" />
     <Compile Include="ICacheToDisk.cs" />
+    <Compile Include="InmemoryCache\RedBlackTreeCache.cs" />
+    <Compile Include="InmemoryCache\StdMemoryCache.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

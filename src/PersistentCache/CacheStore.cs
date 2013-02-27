@@ -31,7 +31,7 @@ namespace PersistentCache
     public class CacheStore : IDisposable
     {
         //private readonly MemoryCache _cache;
-        private BlockingCache _cache;
+        private ICache _cache;
         private readonly ICacheToDisk _diskCache;
         private bool _itemsCachedToDisk = false;
 
@@ -58,8 +58,16 @@ namespace PersistentCache
             if (!Directory.Exists(baseDirectory))
                 Directory.CreateDirectory(BaseDirectory);
 
-            //_cache = new MemoryCache("MainCache", config);
+            
+            // fast 28secs for 2,000,000
+            //_cache = new StdMemoryCache(config, RemovedCallback);
+            
+            // fast 12secs for 2,000,000
             _cache = new BlockingCache(1000000, TimeSpan.FromSeconds(30), RemovedCallback);
+            
+            // 88seconds for 2million, sloooooowwww
+            //_cache = new RedBlackTreeCache(RemovedCallback);
+            
             _diskCache = new DirectoryCache(BaseDirectory);
         }
 
@@ -97,15 +105,7 @@ namespace PersistentCache
         }
 
 
-        private void RemovedCallback(CacheEntryRemovedArguments arguments)
-        {
-            // if we are not removing the item cos it was removed by the caller then save it to disk
-            if (arguments.RemovedReason == CacheEntryRemovedReason.Evicted || arguments.RemovedReason == CacheEntryRemovedReason.Expired)
-            {
-                _itemsCachedToDisk = true;
-                _diskCache.Put(arguments.CacheItem.Key, arguments.CacheItem.Value);
-            }
-        }
+        
 
         private void RemovedCallback(string key, object value)
         {

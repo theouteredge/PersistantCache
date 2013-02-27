@@ -132,7 +132,8 @@ namespace PersistentCache.InmemoryCache
 
         private void RemoveItemFromCache(KeyValuePair<string, CachedValue> item)
         {
-            CacheItemRemovedCallback.Invoke(item.Key, item.Value);
+            if (CacheItemRemovedCallback != null)
+                CacheItemRemovedCallback.Invoke(item.Key, item.Value);
 
             object value;
             TryRemove(item.Key, out value);
