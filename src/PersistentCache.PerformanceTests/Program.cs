@@ -12,13 +12,13 @@ namespace PersistentCache.PerformanceTests
 {
     class Program
     {
-        private static readonly CacheStore PersistentCache = new CacheStore("c:\\tmp\\PersistantCache", "1", null, "00:01:00");
+        private static readonly CacheStore PersistentCache = new CacheStore("c:\\tmp\\PersistantCache", "1", null, "00:00:10");
 
 
         static void Main(string[] args)
         {
             Console.WriteLine("Creating Data");
-            const int itemsToUse = 1000000;
+            const int itemsToUse = 2000000;
 
             var items = GenerateList(itemsToUse, 20);
             items.Shuffle();

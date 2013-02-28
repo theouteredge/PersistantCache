@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>CSharpTest.Net.BPlusTree</id>
+    <version>2.12.810.409</version>
+    <title>CSharpTest.Net.BPlusTree - A Fully managed B+ Tree for local data storage</title>
+    <authors>Roger Knapp</authors>
+    <owners>Roger Knapp</owners>
+    <licenseUrl>http://csharptest.net/src/LICENSE-2.0.txt</licenseUrl>
+    <projectUrl>http://code.google.com/p/csharptest-net/</projectUrl>
+    <iconUrl>http://csharptest.net/favicon.ico</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>==CSharpTest.Net.BPlusTree==
+This library is a fairly full featured IDictionary&lt;TKey, TValue&gt; implementation
+backed by a B+Tree on disk.  The instance is thread-safe and supports a form of
+MVCC (Multi Version Concurancy Control) to support non-blocking reads.  Great
+for storing a local cache or use it as a completly local stand-alone database.</description>
+    <summary>CSharpTest.Net.BPlusTree is a simple IDictionary&lt;TKey, TValue&gt; backed by a B+Tree.</summary>
+    <releaseNotes>See the main project page (http://code.google.com/p/csharptest-net/) for release notes.</releaseNotes>
+    <copyright>Copyright 2008-2011 by Roger Knapp, Licensed under the Apache License, Version 2.0</copyright>
+    <tags>B+ Tree BPlus BTree BPlusTree Dictionary Binary File Storage</tags>
+    <dependencies>
+      <dependency id="CSharpTest.Net.Library" version="2.12.810.409" />
+    </dependencies>
+    <references>
+      <reference file="CSharpTest.Net.BPlusTree.dll" />
+    </references>
+  </metadata>
+</package>
