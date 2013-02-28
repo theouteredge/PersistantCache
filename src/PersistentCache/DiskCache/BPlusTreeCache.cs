@@ -8,29 +8,37 @@ using PersistentCache.Util;
 
 namespace PersistentCache.DiskCache
 {
-    public class BPlusTreeCache : ICacheToDisk
-    {
-	    private readonly int _uniqueStores;
-	    private Dictionary<string, BPlusTree<string, int>> _stores;
+	public class BPlusTreeCache<T> : ICacheToDisk
+	{
+		private readonly int _uniqueStores;
+		private Dictionary<string, BPlusTree<string, T>> _stores;
+
+		public class ProtoNetSerializer<T> : ISerializer<T>
+		{
+			public T ReadFrom(Stream stream)
+			{
+				return ProtoBuf.Serializer.DeserializeWithLengthPrefix<T>(stream, ProtoBuf.PrefixStyle.Base128);
+			}
+			public void WriteTo(T value, Stream stream)
+			{
+				ProtoBuf.Serializer.SerializeWithLengthPrefix<T>(stream, value, ProtoBuf.PrefixStyle.Base128);
+			}
+		}
 
 	    public BPlusTreeCache(string baseDirectory, int uniqueStores = 2, string allowedKeyCharacters = "0123456789ABCDEF")
 		{
 		    _uniqueStores = uniqueStores;
-		    _stores = new Dictionary<string, BPlusTree<string, int>>(StringComparer.CurrentCultureIgnoreCase);
+			_stores = new Dictionary<string, BPlusTree<string, T>>(StringComparer.CurrentCultureIgnoreCase);
 
 			// first lets generate a list of store identifiers that we can work work by generating the cartesian product of the 
 			// first x characters from the list of characters allowed in the key
 			// storeNames now contains the values '00', '01', '02' ...
 			var storeNames = Enumerable.Repeat(allowedKeyCharacters, uniqueStores).CartesianProduct();
 
-
-		    var i = 0;
 		    foreach (var storeName in storeNames)
 		    {
 			    var storeNameString = new string(storeName.ToArray());	// storeName is IEnumerable<char>
-				Console.WriteLine("i: " + i + " " + storeNameString);
-			    i++;
-				var cacheOptions = new BPlusTree<string, int>.Options(PrimitiveSerializer.String, PrimitiveSerializer.Int32, StringComparer.Ordinal)
+				var cacheOptions = new BPlusTree<string, T>.Options(PrimitiveSerializer.String, new ProtoNetSerializer<T>(), StringComparer.Ordinal)
 				{
 					CreateFile = CreatePolicy.IfNeeded,
 					FileName = Path.Combine(baseDirectory, String.Format("Storage-{0}.dat", storeNameString)),
@@ -38,7 +46,7 @@ namespace PersistentCache.DiskCache
 				
 					
 				};
-				var cache = new BPlusTree<string, int>(cacheOptions);
+				var cache = new BPlusTree<string, T>(cacheOptions);
 				_stores.Add(storeNameString, cache);
 		    }
 		}
@@ -51,53 +59,39 @@ namespace PersistentCache.DiskCache
         public void Put(string key, object value)
         {
 	        var store = GetStore(key);
-			store[key] = (int) value;
+			store[key] = (T) value;
         }
 
-        public T Get<T>(string key)
+        public TValue Get<TValue>(string key)
         {
             try
             {
-				return (T)(object)GetStore(key)[key];
+				var store = GetStore(key);
+				return (TValue)(store[key] as object);
             }
             catch (Exception)
             {
-                return default(T);
+                return default(TValue);
             }
         }
 
-        public bool TryGet<T>(string key, out T value)
+        public bool TryGet<TValue>(string key, out TValue value)
         {
             try
             {
                 if (Contains(key))
                 {
-	               value = Get<T>(key);
+	               value =  Get<TValue>(key);
                    return true;
                 }
 
-                value = default(T);
+                value = default(TValue);
                 return false;
             }
             catch (Exception)
             {
-                value = default(T);
+                value = default(TValue);
                 return false;
-            }
-        }
-
-        public string Get(string key)
-        {
-            try
-            {
-                if (Contains(key))
-	                return Get<string>(key);
-                
-                return null;
-            }
-            catch (Exception)
-            {
-                return null;
             }
         }
 
@@ -109,7 +103,6 @@ namespace PersistentCache.DiskCache
 				{
 					var store = _stores[key];
 					store.Dispose();
-					_stores.Remove(key);
 				}
 
 				// tidy up the stores
@@ -121,7 +114,7 @@ namespace PersistentCache.DiskCache
 		/// <summary>
 		/// Returns the specific store that holds the item with the key
 		/// </summary>
-		private BPlusTree<string, int> GetStore(string key)
+		private BPlusTree<string, T> GetStore(string key)
 		{
 			return _stores[key.Substring(0, _uniqueStores)];
 		}

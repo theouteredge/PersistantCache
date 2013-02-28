@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
-using System.Runtime.Caching;
 using System.Security.Cryptography;
 using System.Text;
 using PersistentCache.DiskCache;
 using PersistentCache.InmemoryCache;
-using ServiceStack.Text;
 
 namespace PersistentCache
 {
@@ -29,7 +27,7 @@ namespace PersistentCache
     /// ------------
     /// ServiceStack.Text
     /// </summary>
-    public class CacheStore : IDisposable
+    public class CacheStore<T> : IDisposable
     {
         //private readonly MemoryCache _cache;
         private ICache _cache;
@@ -91,7 +89,7 @@ namespace PersistentCache
             //_cache = new RedBlackTreeCache(RemovedCallback);
 
 			//_diskCache = new DirectoryCache(BaseDirectory);
-			_diskCache = new BPlusTreeCache(BaseDirectory);
+			_diskCache = new BPlusTreeCache<T>(BaseDirectory, 1);
 			//_diskCache = new DBreezeCache(BaseDirectory);
         }
 
@@ -120,8 +118,12 @@ namespace PersistentCache
             if (_itemsCachedToDisk)
             {
                 // it wasn't in the memory cache, so look for it within the ICacheToDisk
-                if (_diskCache.TryGet<T>(key, out value))
-                    return true;
+	            T item;
+				if (_diskCache.TryGet(key, out item))
+	            {
+		            value = item;
+		            return true;
+	            }
             }
 
             value = default(T);
@@ -141,12 +143,9 @@ namespace PersistentCache
         private static string Hash(string s)
         {
             var hash = new SHA1Managed();
-            var result = "";
-
-            var buffer = Encoding.UTF8.GetBytes(s);
+	        var buffer = Encoding.UTF8.GetBytes(s);
             var hashedBuffer = hash.ComputeHash(buffer);
-
-			result = ToHex(hashedBuffer);
+			var result = ToHex(hashedBuffer);
 
             return result;
         }
@@ -167,12 +166,12 @@ namespace PersistentCache
 		/// <returns>A hex string representation of the array of bytes.</returns>
 		private static string ToHex(IEnumerable<byte> value)
 		{
-			var stringBuilder = new StringBuilder();
+			var sb = new StringBuilder();
 			if (value != null)
 				foreach (var b in value)
-					stringBuilder.Append(HexStringTable[b]);
+					sb.Append(HexStringTable[b]);
 
-			return stringBuilder.ToString();
+			return sb.ToString();
 		}
     }
 }
