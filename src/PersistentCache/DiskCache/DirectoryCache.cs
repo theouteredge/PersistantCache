@@ -108,7 +108,7 @@ namespace PersistentCache.DiskCache
 
         public void Dispose()
         {
-            Directory.Delete(_baseDirectory);
+            Directory.Delete(_baseDirectory, true);
         }
     }
 }

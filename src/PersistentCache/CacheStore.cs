@@ -60,10 +60,10 @@ namespace PersistentCache
 
 
             // 28secs for 2,000,000. ok... 
-            _cache = new StdMemoryCache(config, RemovedCallback);
+            //_cache = new StdMemoryCache(config, RemovedCallback);
             
-            // 12secs for 2,000,000. But needs more work to implement the Cache Management correctly
-            //_cache = new BlockingCache(1000000, TimeSpan.FromSeconds(30), RemovedCallback);
+            // 15secs for 2,000,000. With basic cache size management, needs to be upgraded to manage actual application memory usage
+            _cache = new BlockingCache(10000, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(10), RemovedCallback);
             
             // 88seconds for 2million, sloooooowwww
             //_cache = new RedBlackTreeCache(RemovedCallback);
