@@ -89,7 +89,7 @@ namespace PersistentCache
             //_cache = new RedBlackTreeCache(RemovedCallback);
 
 			//_diskCache = new DirectoryCache(BaseDirectory);
-			_diskCache = new BPlusTreeCache<T>(BaseDirectory, 1);
+			_diskCache = new BPlusTreeCache<T>(BaseDirectory);
 			//_diskCache = new DBreezeCache(BaseDirectory);
         }
 
