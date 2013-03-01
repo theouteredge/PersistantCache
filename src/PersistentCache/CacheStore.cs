@@ -31,7 +31,7 @@ namespace PersistentCache
     {
         //private readonly MemoryCache _cache;
         private ICache _cache;
-        private readonly ICacheToDisk _diskCache;
+        private ICacheToDisk _diskCache;
         private bool _itemsCachedToDisk = false;
 
 
@@ -135,8 +135,11 @@ namespace PersistentCache
 
         private void RemovedCallback(string key, object value)
         {
-            _diskCache.Put(key, value);
-            _itemsCachedToDisk = true;
+			if (_diskCache != null)
+			{
+				_diskCache.Put(key, value);
+				_itemsCachedToDisk = true;
+			}
         }
 
         
@@ -153,7 +156,11 @@ namespace PersistentCache
         public void Dispose()
         {
             if (_diskCache != null)
-                _diskCache.Dispose();
+            {
+				_diskCache.Dispose();
+	            _diskCache = null;
+            }
+                
 
             if (_cache != null)
                 _cache.Dispose();
