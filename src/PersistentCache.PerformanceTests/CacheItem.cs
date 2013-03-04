@@ -3,6 +3,6 @@
     internal class CacheItem
     {
         public string Key { get; set; }
-        public int Value { get; set; }
+	    public Thing Value { get; set; }
     }
 }

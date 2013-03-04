@@ -12,13 +12,15 @@ namespace PersistentCache.PerformanceTests
 {
     class Program
     {
-        private static readonly CacheStore PersistentCache = new CacheStore("c:\\tmp\\PersistantCache", "1", null, "00:01:00");
+        private static CacheStore<Thing> PersistentCache;
 
 
         static void Main(string[] args)
         {
+	        PersistentCache = new CacheStore<Thing>("c:\\tmp\\PersistantCache", "1", null, "00:00:10");
+
             Console.WriteLine("Creating Data");
-            const int itemsToUse = 1000000;
+            const int itemsToUse = 2000000;
 
             var items = GenerateList(itemsToUse, 20);
             items.Shuffle();
@@ -48,7 +50,7 @@ namespace PersistentCache.PerformanceTests
 
             for (var i = 0; i < uniqueCount; i++)
             {
-                results.Add(new CacheItem() { Key = Guid.NewGuid().ToString(), Value = i });
+				results.Add(new CacheItem() { Key = Guid.NewGuid().ToString(), Value = new Thing() { Value = i } });
             }
 
             var random = new Random(DateTime.Now.Millisecond);
@@ -107,7 +109,7 @@ namespace PersistentCache.PerformanceTests
             {
                 count++;
 
-                var value = 0;
+                Thing value;
                 if (PersistentCache.TryGet(item.Key, out value))
                 {
                     cacheHits++;
@@ -121,7 +123,7 @@ namespace PersistentCache.PerformanceTests
                         exceptions++;
                 }
 
-                if (value != item.Value)
+                if (value.Value != item.Value.Value)
                 {
                     storageExceptions++;
                 }
