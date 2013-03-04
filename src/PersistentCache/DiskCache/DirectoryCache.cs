@@ -39,7 +39,7 @@ namespace PersistentCache.DiskCache
             try
             {
                 var directory = GetSafeDirectoryName(key);
-                return File.ReadAllText(Path.Combine(directory, FILENAME)).FromJson<T>();
+                return ReadAllText(Path.Combine(directory, FILENAME)).FromJson<T>();
             }
             catch (Exception)
             {
@@ -54,7 +54,7 @@ namespace PersistentCache.DiskCache
                 if (Contains(key))
                 {
                     var directory = GetSafeDirectoryName(key);
-                    value = File.ReadAllText(Path.Combine(directory, FILENAME)).FromJson<T>();
+                    value = ReadAllText(Path.Combine(directory, FILENAME)).FromJson<T>();
                     return true;
                 }
 
@@ -75,7 +75,7 @@ namespace PersistentCache.DiskCache
                 if (Contains(key))
                 {
                     var directory = GetSafeDirectoryName(key);
-                    return File.ReadAllText(Path.Combine(directory, FILENAME));
+                    return ReadAllText(Path.Combine(directory, FILENAME));
                 }
                 
                 return null;
@@ -86,24 +86,20 @@ namespace PersistentCache.DiskCache
             }
         }
 
-
+		private static string ReadAllText(string filePath)
+		{
+			using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read))
+			{
+				using (var rdr = new StreamReader(fs))
+				{
+					return rdr.ReadToEnd();
+				}
+			}
+		}
 
         private string GetSafeDirectoryName(string key)
         {
-            var invalidChars = Path.GetInvalidFileNameChars();
-            var result = new char[key.Length];
-
-            for (var i = 0; i < key.Length; i++)
-            {
-                if (invalidChars.Contains(key[i]))
-                    result[i] = '_';
-                else
-                    result[i] = key[i];
-            }
-            // lots of replaces are very slow when called 1000s of times per second
-            //Array.ForEach(Path.GetInvalidFileNameChars(), c => key = key.Replace(c.ToString(), "_"));
-            
-            return Path.Combine(_baseDirectory, new string(result));
+            return Path.Combine(_baseDirectory,key);
         }
 
         public void Dispose()

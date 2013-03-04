@@ -8,8 +8,8 @@ namespace PersistentCache
 
         void Put(string key, object value);
 
-        T Get<T>(string key);
-        bool TryGet<T>(string key, out T value);
-        string Get(string key);
+        TValue Get<TValue>(string key);
+        bool TryGet<TValue>(string key, out TValue value);
+        //string Get(string key);
     }
 }

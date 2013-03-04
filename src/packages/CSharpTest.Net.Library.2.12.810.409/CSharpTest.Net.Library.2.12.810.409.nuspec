@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>CSharpTest.Net.Library</id>
+    <version>2.12.810.409</version>
+    <title>CSharpTest.Net.Library - Collection of utilities and misc classes</title>
+    <authors>Roger Knapp</authors>
+    <owners>Roger Knapp</owners>
+    <licenseUrl>http://csharptest.net/src/LICENSE-2.0.txt</licenseUrl>
+    <projectUrl>http://code.google.com/p/csharptest-net/</projectUrl>
+    <iconUrl>http://csharptest.net/favicon.ico</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>==CSharpTest.Net.Library==
+A collection of unrelated helper classes and utilities for a wide variety of
+uses:
+
+- Base classes like Disposable, Comparable, Equatable
+- Configuration based UserSettings
+- Object cloning and deep cloning
+- Disposable lists
+- OrdinalList / set operations on bits
+- SetList / set operations on small lists
+- Parsing command-line arguments
+- Complete command-line interpreter
+- BinaryComparer and ReferenceComparer implementations
+- Cryptography AES Rijndael RSA Process PBKDF2 Hash Salt Password PasswordKey 
+  SaltedData SecureString Whirlpool HashStream Secure Transfer over PKI
+- Thread safe EventHandler for WinForms
+- Base64Stream ByteEncoding HexEncoding HexStream Safe64Encoding Safe64Stream
+- Xml and Html Parser and DOM tree with XSLT/XPath support
+- Missing interfaces like IClonable&lt;T&gt; IFactory&lt;T&gt; and ITransactable
+- IO Stream utilities Aggregate stream base, ClampedStream, CombinedStream
+  DisposingStream NonClosingStream CopyStream MarshallingStream StreamCache
+- TempDirectory and TempFile to manage temporary file resources
+- FragmentedFile storing multiple streams of data in a single file
+- IpcChannel for fully connected cross process event broadcasting
+- ProcessRunner and AssemblyRunner to run command-line and capture output
+- ScriptRunner to run a variety of common script types and capture output
+- Property and nested property value serializer via reflection
+- Binary and Text serializaiton for most common .NET types
+- ArgumentList for parsing command-line switch arguments
+- FileList a collection of FileInfo's
+- ILockStrategy and ILockFactory to abstract reader/writer locking
+- SimpleReadWriteLocking based on Monitor.Enter (faster than the two built
+  in Reader/Writer locks)
+- Lock diagnostics and statistics like debug locking, counter locking
+- MutexLock a Disposable wrapper for a Mutex
+- SafeLock a Disposable wrapper for Monitor.Enter
+- WorkQueue for Action and Action&lt;T&gt; delegates
+- WaitAndContinue single-thread work list based on wait handles
+- ObjectKeepAlive to keep a limited reference list to WeakReferences
+- WeakReference&lt;T&gt; a strongly typed derivation of WeakReferences
+- RegexPatterns a list of commonly used patterns</description>
+    <summary>CSharpTest.Net.Library is a collection of unrelated helper classes and utilities for a wide variety of uses.</summary>
+    <releaseNotes>See the main project page (http://code.google.com/p/csharptest-net/) for release notes.</releaseNotes>
+    <copyright>Copyright 2008-2011 by Roger Knapp, Licensed under the Apache License, Version 2.0</copyright>
+    <tags>Class Library Clone DeepClone CommandLine CommandInterpreter ArgumentList Crypto Cryptography IO Stream HTML XML Parser IPC Events Process ProcessRunner ScriptRunner Serialization Synchronization Threading</tags>
+    <references>
+      <reference file="CSharpTest.Net.Library.dll" />
+    </references>
+  </metadata>
+</package>
