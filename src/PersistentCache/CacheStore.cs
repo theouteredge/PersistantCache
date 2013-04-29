@@ -48,7 +48,7 @@ namespace PersistentCache
 
 
 
-        public CacheStore(string baseDirectory, string pollingInterval, string physicalMemoryLimitPercentage, string cacheMemoryLimitMegabytes, ICacheToDisk diskCache)
+        public CacheStore(string baseDirectory, string cacheMemoryLimitMegabytes, string physicalMemoryLimitPercentage, string pollingInterval, ICacheToDisk diskCache)
         {
             BaseDirectory = baseDirectory;
             _diskCache = diskCache;

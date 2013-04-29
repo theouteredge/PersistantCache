@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CSharpTest.Net.BPlusTree">
@@ -36,6 +38,14 @@
     </Reference>
     <Reference Include="CSharpTest.Net.Library">
       <HintPath>..\packages\CSharpTest.Net.Library.2.12.810.409\lib\net40\CSharpTest.Net.Library.dll</HintPath>
+    </Reference>
+    <Reference Include="Esent.Collections, Version=1.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\ManagedEsent.1.6\lib\net20\Esent.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="Esent.Interop, Version=1.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\ManagedEsent.1.6\lib\net20\Esent.Interop.dll</HintPath>
     </Reference>
     <Reference Include="protobuf-net, Version=2.0.0.621, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -51,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DiskCache\BPlusTreeCache.cs" />
+    <Compile Include="DiskCache\EsentPersistentDictionary.cs" />
     <Compile Include="InmemoryCache\BlockingCache.cs" />
     <Compile Include="CacheStore.cs" />
     <Compile Include="InmemoryCache\CachedValue.cs" />
@@ -60,13 +71,14 @@
     <Compile Include="ICacheToDisk.cs" />
     <Compile Include="InmemoryCache\StdMemoryCache.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Thing.cs" />
+    <Compile Include="CacheItem.cs" />
     <Compile Include="Util\EnumerableExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="protos\google\protobuf\csharp_options.proto" />
     <None Include="protos\google\protobuf\descriptor.proto" />
+    <None Include="README.rtf" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="CHANGES.txt" />

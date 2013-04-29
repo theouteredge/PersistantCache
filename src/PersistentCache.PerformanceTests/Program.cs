@@ -13,15 +13,17 @@ namespace PersistentCache.PerformanceTests
 {
     class Program
     {
-        private static CacheStore<Thing> PersistentCache;
+        private static CacheStore<PersistentCache.CacheItem> PersistentCache;
 
 
         static void Main(string[] args)
         {
             const string baseDirectory = "c:\\tmp\\PersistantCache";
 
-            var diskCache = new BPlusTreeCache<Thing>(baseDirectory, 1);
-            PersistentCache = new CacheStore<Thing>(baseDirectory, "1", null, "00:00:10", diskCache);
+            //var diskCache = new BPlusTreeCache<Thing>(baseDirectory, 1);
+
+            var diskCache = new EsentPersistentDictionary(baseDirectory);
+            PersistentCache = new CacheStore<PersistentCache.CacheItem>(baseDirectory, "1", null, "00:00:10", diskCache);
 
             Console.WriteLine("Creating Data");
             const int itemsToUse = 1000000;
@@ -54,7 +56,7 @@ namespace PersistentCache.PerformanceTests
 
             for (var i = 0; i < uniqueCount; i++)
             {
-				results.Add(new CacheItem() { Key = Guid.NewGuid().ToString(), Value = new Thing() { Value = i } });
+				results.Add(new CacheItem() { Key = Guid.NewGuid().ToString(), Value = new PersistentCache.CacheItem() { Value = i } });
             }
 
             var random = new Random(DateTime.Now.Millisecond);
@@ -113,7 +115,7 @@ namespace PersistentCache.PerformanceTests
             {
                 count++;
 
-                Thing value;
+                PersistentCache.CacheItem value;
                 if (PersistentCache.TryGet(item.Key, out value))
                 {
                     cacheHits++;
