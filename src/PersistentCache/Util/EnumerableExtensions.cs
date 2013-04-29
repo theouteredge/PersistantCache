@@ -8,7 +8,7 @@ namespace PersistentCache.Util
 		/// <summary>
 		/// Taken from http://blogs.msdn.com/b/ericlippert/archive/2010/06/28/computing-a-cartesian-product-with-linq.aspx
 		/// </summary>
-		public static IEnumerable<IEnumerable<T>> CartesianProduct<T>(this IEnumerable<IEnumerable<T>> sequences)
+		public static IList<IEnumerable<T>> CartesianProduct<T>(this IEnumerable<IEnumerable<T>> sequences)
 		{
 			IEnumerable<IEnumerable<T>> emptyProduct = new[] { Enumerable.Empty<T>() };
 			return sequences.Aggregate(
@@ -17,7 +17,7 @@ namespace PersistentCache.Util
 				from accseq in accumulator
 				from item in sequence
 				select accseq.Concat(new[] { item })
-			);
+			).ToList();
 		}
 	}
 }

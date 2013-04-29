@@ -6,6 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using PersistentCache.DiskCache;
 using ServiceStack.Text;
 
 namespace PersistentCache.PerformanceTests
@@ -17,10 +18,13 @@ namespace PersistentCache.PerformanceTests
 
         static void Main(string[] args)
         {
-	        PersistentCache = new CacheStore<Thing>("c:\\tmp\\PersistantCache", "1", null, "00:00:10");
+            const string baseDirectory = "c:\\tmp\\PersistantCache";
+
+            var diskCache = new BPlusTreeCache<Thing>(baseDirectory, 1);
+            PersistentCache = new CacheStore<Thing>(baseDirectory, "1", null, "00:00:10", diskCache);
 
             Console.WriteLine("Creating Data");
-            const int itemsToUse = 2000000;
+            const int itemsToUse = 1000000;
 
             var items = GenerateList(itemsToUse, 20);
             items.Shuffle();
