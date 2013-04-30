@@ -25,23 +25,22 @@ namespace PersistentCache.DiskCache
 
         public void Dispose()
         {
-            _disposing = true;
-
             if (_persistentDictionary != null && !_disposing)
             {
+                _disposing = true;
+
                 _persistentDictionary.Dispose();
                 _persistentDictionary = null;
-            }
 
-            //todo: this throws an exception. so we need to find a better way of doing this.
-            try
-            {
-                if (Directory.Exists(_path))
-                    Directory.Delete(_path, true);
-            }
-            catch (Exception)
-            {
-                // swallow the error that we couldn't clean the directory for now.
+                try
+                {
+                    if (Directory.Exists(_path))
+                        Directory.Delete(_path, true);
+                }
+                catch (Exception)
+                {
+                    // swallow the error that we couldn't clean the directory for now.
+                }
             }
         }
 
