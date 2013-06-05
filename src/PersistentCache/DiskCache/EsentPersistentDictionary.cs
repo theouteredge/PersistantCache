@@ -29,8 +29,12 @@ namespace PersistentCache.DiskCache
             {
                 _disposing = true;
 
+                var databasePath = _persistentDictionary.Database;
+
                 _persistentDictionary.Dispose();
                 _persistentDictionary = null;
+
+                PersistentDictionaryFile.DeleteFiles(databasePath);
 
                 try
                 {
@@ -42,6 +46,9 @@ namespace PersistentCache.DiskCache
                     // swallow the error that we couldn't clean the directory for now.
                 }
             }
+
+            // force the Esent store to be cleaned out of memory
+            GC.Collect(2, GCCollectionMode.Forced);
         }
 
 

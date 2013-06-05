@@ -28,7 +28,7 @@ namespace PersistentCache
     /// system memory and you want the cache to store all the values while performing a single long running process. Once the process has completed the
     /// cache should be disposed of.
     /// 
-    /// Once the available memory starts to run out and items are evicted or expired from the in memory cache they will be persisted to the disk based cache.
+    /// Once the available memory starts to run out and items are evicted or expired from the inmemory cache they will be persisted to the disk based cache.
     /// 
     /// Persistant Cache will first check the 
     /// </summary>
@@ -64,14 +64,7 @@ namespace PersistentCache
             if (!Directory.Exists(baseDirectory))
                 Directory.CreateDirectory(BaseDirectory);
 
-
-            // 28secs for 2,000,000. ok... 
             _cache = new StdMemoryCache(config, RemovedCallback);
-            
-            // 15secs for 2,000,000. With basic cache size management, needs to be upgraded to manage actual application memory usage
-            //_cache = new BlockingCache(10000, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(10), RemovedCallback);
-            //_diskCache = new DirectoryCache(BaseDirectory);
-            //_diskCache = new BPlusTreeCache<T>(BaseDirectory, diskCacheDepth);
         }
 
 
