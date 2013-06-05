@@ -46,7 +46,22 @@ namespace PersistentCache
 
         public string BaseDirectory { get; set; }
 
+        public CacheStore(string baseDirectory)
+        {
+            BaseDirectory = baseDirectory;
+            
+            var config = new NameValueCollection
+                {
+                    {"pollingInterval", "00:01:00" },
+                    {"physicalMemoryLimitPercentage", "80" }
+                };
 
+            if (!Directory.Exists(baseDirectory))
+                Directory.CreateDirectory(BaseDirectory);
+
+            _cache = new StdMemoryCache(config, RemovedCallback);
+            _diskCache = new EsentPersistentDictionary(baseDirectory);
+        }
 
         public CacheStore(string baseDirectory, string cacheMemoryLimitMegabytes, string physicalMemoryLimitPercentage, string pollingInterval, ICacheToDisk diskCache)
         {
@@ -75,7 +90,7 @@ namespace PersistentCache
         }
 
 
-        public bool TryGet<T>(string key, out T value)
+        public bool TryGet<TResult>(string key, out TResult value)
         {
             key = Hash(key);
 
@@ -85,14 +100,14 @@ namespace PersistentCache
             object valueTmp;
             if (_cache.TryGet(key, out valueTmp))
             {
-                value = (T) valueTmp;
+                value = (TResult)valueTmp;
                 return true;
             }
 
             if (_itemsCachedToDisk)
             {
                 // it wasn't in the memory cache, so look for it within the ICacheToDisk
-	            T item;
+                TResult item;
 				if (_diskCache.TryGet(key, out item))
 	            {
 		            value = item;
@@ -100,7 +115,7 @@ namespace PersistentCache
 	            }
             }
 
-            value = default(T);
+            value = default(TResult);
             return false;
         }
 
