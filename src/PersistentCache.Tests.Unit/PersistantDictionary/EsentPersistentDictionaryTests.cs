@@ -81,7 +81,8 @@ namespace PersistentCache.Tests.Unit.PersistantDictionary
 
 
         [Test]
-        public void PersistantDictionary_DisposesEsentDatabaseCorrectly_WeCanCreateMoreThan1024Instances()
+        [Ignore]
+        public void PersistantDictionary_DisposesEsentDatabaseCorrectly_WeCanCreateStoreDisposeWithMoreThan2048Instances()
         {
             for (var i = 0; i < 2048; i++)
             {
