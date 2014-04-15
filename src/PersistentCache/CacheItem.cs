@@ -3,8 +3,8 @@
 namespace PersistentCache
 {
     [Serializable]
-	public class CacheItem
-	{
-		public int Value { get; set; }
-	}
+    public class CacheItem
+    {
+        public int Value { get; set; }
+    }
 }
