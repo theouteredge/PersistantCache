@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace PersistentCache
 {
@@ -10,6 +11,7 @@ namespace PersistentCache
 
         TValue Get<TValue>(string key);
         bool TryGet<TValue>(string key, out TValue value);
-        //string Get(string key);
+
+        IEnumerable<KeyValuePair<string, TValue>> GetEnumerable<TValue>();
     }
 }

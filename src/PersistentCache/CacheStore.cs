@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using PersistentCache.DiskCache;
@@ -47,6 +48,8 @@ namespace PersistentCache
 
         public string BaseDirectory { get; set; }
 
+
+
         public CacheStore(string baseDirectory)
         {
             BaseDirectory = baseDirectory;
@@ -63,6 +66,7 @@ namespace PersistentCache
             _cache = new StdMemoryCache(config, RemovedCallback);
             _diskCache = new EsentPersistentDictionary(baseDirectory);
         }
+
 
         public CacheStore(string baseDirectory, string cacheMemoryLimitMegabytes, string physicalMemoryLimitPercentage, string pollingInterval, ICacheToDisk diskCache)
         {
@@ -83,6 +87,14 @@ namespace PersistentCache
             _cache = new StdMemoryCache(config, RemovedCallback);
         }
 
+
+
+        public IEnumerable<KeyValuePair<string, T>> GetEnumerable()
+        {
+            return _cache.GetEnumerable()
+                         .Select(x => new KeyValuePair<string, T>(x.Key, (T) x.Value))
+                         .Concat(_diskCache.GetEnumerable<T>());
+        }
 
 
         public void Put(string key, object value, int itemExpiration = 10)

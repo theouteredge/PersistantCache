@@ -23,7 +23,7 @@ namespace PersistentCache.DiskCache
         }
 
 
-
+                
         public void Dispose()
         {
             if (_persistentDictionary != null && !_disposing)
@@ -51,6 +51,15 @@ namespace PersistentCache.DiskCache
             // force the Esent store to be cleaned out of memory
             GC.Collect(2, GCCollectionMode.Forced);
         }
+
+
+
+        public IEnumerable<KeyValuePair<string, object>> GetEnumerable<TValue>()
+        {
+            return _persistentDictionary.Select(x => new KeyValuePair<string, object>(x.Key, x.Value.FromJson<TValue>()));
+        }
+
+
 
 
         public bool Contains(string key)
