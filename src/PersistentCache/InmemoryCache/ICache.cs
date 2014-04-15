@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace PersistentCache.InmemoryCache
 {
@@ -9,5 +10,7 @@ namespace PersistentCache.InmemoryCache
         bool TryGet(string key, out object value);
         bool TryAdd(string key, object value);
         bool TryRemove(string key, out object value);
+
+        IEnumerable<KeyValuePair<string, object>> GetEnumerable();
     }
 }

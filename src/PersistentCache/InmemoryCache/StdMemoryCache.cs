@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Runtime.Caching;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -27,7 +28,13 @@ namespace PersistentCache.InmemoryCache
             _cache = null;
         }
 
-        
+
+        public IEnumerable<KeyValuePair<string, object>> GetEnumerable()
+        {
+            return _cache;
+        }
+           
+
 
         public bool TryGet(string key, out object value)
         {
