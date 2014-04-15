@@ -12,6 +12,10 @@
         <summary>Persistent Cache Library</summary>
         <copyright>theouteredge</copyright>
         <tags>Persistent Cache</tags>
+
+        <dependencies>
+            <dependency id="ManagedEsent" version="1.6" />
+        </dependencies>
     </metadata>
     
     <files>

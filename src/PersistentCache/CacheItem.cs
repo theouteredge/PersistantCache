@@ -1,9 +1,7 @@
 ﻿using System;
-using ProtoBuf;
 
 namespace PersistentCache
 {
-	[ProtoContract]
     [Serializable]
 	public class CacheItem
 	{

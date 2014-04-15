@@ -44,7 +44,7 @@ namespace PersistentCache.InmemoryCache
 
         public bool TryAdd(string key, object value)
         {
-            return _cache.Add(key, value, new CacheItemPolicy() {RemovedCallback = RemovedCallback});
+            return _cache.Add(key, value, new CacheItemPolicy() { RemovedCallback = RemovedCallback });
         }
 
         public bool TryRemove(string key, out object value)

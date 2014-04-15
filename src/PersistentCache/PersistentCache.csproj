@@ -47,10 +47,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\ManagedEsent.1.6\lib\net20\Esent.Interop.dll</HintPath>
     </Reference>
-    <Reference Include="protobuf-net, Version=2.0.0.621, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\protobuf-net.2.0.0.621\lib\net40\protobuf-net.dll</HintPath>
-    </Reference>
     <Reference Include="ServiceStack.Text">
       <HintPath>..\packages\ServiceStack.Text.3.9.37\lib\net35\ServiceStack.Text.dll</HintPath>
     </Reference>
@@ -60,14 +56,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DiskCache\BPlusTreeCache.cs" />
     <Compile Include="DiskCache\EsentPersistentDictionary.cs" />
     <Compile Include="InmemoryCache\BlockingCache.cs" />
     <Compile Include="CacheStore.cs" />
     <Compile Include="InmemoryCache\CachedValue.cs" />
     <Compile Include="InmemoryCache\ICache.cs" />
-    <Compile Include="DiskCache\DirectoryCache.cs" />
-    <Compile Include="DiskCache\FileCache.cs" />
     <Compile Include="ICacheToDisk.cs" />
     <Compile Include="InmemoryCache\StdMemoryCache.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
