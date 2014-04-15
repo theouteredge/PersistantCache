@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Microsoft.Isam.Esent.Collections.Generic;
+using ServiceStack;
 using ServiceStack.Text;
 
 namespace PersistentCache.DiskCache

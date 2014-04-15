@@ -7,7 +7,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using PersistentCache.DiskCache;
-using ServiceStack.Text;
 
 namespace PersistentCache.PerformanceTests
 {
@@ -56,7 +55,7 @@ namespace PersistentCache.PerformanceTests
 
             for (var i = 0; i < uniqueCount; i++)
             {
-				results.Add(new CacheItem() { Key = Guid.NewGuid().ToString(), Value = new PersistentCache.CacheItem() { Value = i } });
+                results.Add(new CacheItem() { Key = Guid.NewGuid().ToString(), Value = new PersistentCache.CacheItem() { Value = i } });
             }
 
             var random = new Random(DateTime.Now.Millisecond);

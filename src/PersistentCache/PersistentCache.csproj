@@ -33,16 +33,17 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Esent.Collections, Version=1.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Esent.Collections, Version=1.8.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ManagedEsent.1.6\lib\net20\Esent.Collections.dll</HintPath>
+      <HintPath>..\packages\ManagedEsent.1.9.0.1\lib\net40\Esent.Collections.dll</HintPath>
     </Reference>
-    <Reference Include="Esent.Interop, Version=1.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Esent.Interop, Version=1.9.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ManagedEsent.1.6\lib\net20\Esent.Interop.dll</HintPath>
+      <HintPath>..\packages\ManagedEsent.1.9.0.1\lib\net40\Esent.Interop.dll</HintPath>
     </Reference>
-    <Reference Include="ServiceStack.Text">
-      <HintPath>..\packages\ServiceStack.Text.3.9.37\lib\net35\ServiceStack.Text.dll</HintPath>
+    <Reference Include="ServiceStack.Text, Version=4.0.18.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\ServiceStack.Text.4.0.18\lib\net40\ServiceStack.Text.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

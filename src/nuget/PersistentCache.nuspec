@@ -8,13 +8,17 @@
         <owners>theouteredge</owners>
         <projectUrl>https://github.com/theouteredge/PersistantCache</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>A C# library which gives you a Persistent Cache, if we run out of memory we will store the expired and evicted cache items to disk. Think Membase but as a simple C# project, which you can include in your project.</description>
+        <description>
+            A C# library which gives you a Persistent Cache, if we run out of memory we will store the expired and evicted cache items to disk. 
+            Think Membase but as a simple C# project, which you can include in your project.
+        </description>
         <summary>Persistent Cache Library</summary>
         <copyright>theouteredge</copyright>
         <tags>Persistent Cache</tags>
 
         <dependencies>
-            <dependency id="ManagedEsent" version="1.6" />
+            <dependency id="ManagedEsent" version="1.9.0.1" />
+            <dependency id="ServiceStack.Text" version="4.0.18" />
         </dependencies>
     </metadata>
     
